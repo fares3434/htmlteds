@@ -1,51 +1,1106 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Piocheur de cartes</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #18212b;
+    color: white;
+    min-height: 100vh;
+    padding: 25px;
+}
+
+.app {
+    width: 100%;
+    max-width: 1100px;
+    margin: auto;
+    text-align: center;
+}
+
+h1 {
+    font-size: 42px;
+    margin: 10px 0;
+}
+
+.subtitle {
+    color: #b8c3ce;
+    margin-bottom: 25px;
+}
+
+/* COMPTEURS */
+
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
+
+.stat {
+    background: #263442;
+    border-radius: 12px;
+    padding: 12px 18px;
+    font-weight: bold;
+}
+
+/* CARTES */
+
+#cards {
+    display: none;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin: 0 auto 25px;
+    width: 100%;
+}
+
+.card {
+    background: white;
+    color: #17202a;
+    border-radius: 20px;
+    padding: 25px;
+    min-height: 350px;
+    text-align: left;
+    box-shadow: 0 18px 50px rgba(0,0,0,0.45);
+
+    animation: cardAppear 0.4s ease;
+}
+
+@keyframes cardAppear {
+
+    from {
+        opacity: 0;
+        transform: scale(0.8) rotateY(90deg);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) rotateY(0);
+    }
+
+}
+
+/* CATEGORIES */
+
+.category {
+    display: inline-block;
+    border-radius: 50px;
+    padding: 8px 13px;
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 18px;
+}
+
+.progres {
+    background: #d9f7df;
+    color: #176b2b;
+}
+
+.regression {
+    background: #ffe0e0;
+    color: #a32323;
+}
+
+.depreciation {
+    background: #ffedc7;
+    color: #8a5600;
+}
+
+.card-title {
+    font-size: 28px;
+    margin: 0 0 18px;
+}
+
+.effect {
+    font-size: 17px;
+    line-height: 1.6;
+}
+
+/* BOUTONS */
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+button {
+    border: none;
+    border-radius: 12px;
+    padding: 14px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.15s, opacity 0.15s;
+}
+
+button:hover {
+    transform: scale(1.04);
+}
+
+button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.primary {
+    background: #4ade80;
+    color: #092b16;
+}
+
+.primary.big {
+    font-size: 18px;
+    padding: 16px 28px;
+}
+
+.secondary {
+    background: #334454;
+    color: white;
+}
+
+/* HISTORIQUE */
+
+.history {
+    margin: 30px auto 0;
+    background: #202d39;
+    border-radius: 16px;
+    padding: 20px;
+    text-align: left;
+}
+
+.history h2 {
+    margin-top: 0;
+}
+
+.history ol {
+    margin-bottom: 0;
+}
+
+.history li {
+    padding: 5px 0;
+    color: #d2dbe3;
+}
+
+.empty {
+    color: #8795a3;
+    font-style: italic;
+}
+
+/* MOBILE */
+
+@media (max-width: 800px) {
+
+    #cards {
+        grid-template-columns: 1fr;
+    }
+
+    .card {
+        min-height: auto;
+    }
+
+    h1 {
+        font-size: 32px;
+    }
+
+}
+
+</style>
+</head>
+
 <body>
-<p>Les<strong> <abbr
-      title="Systèmes écologiques situés dans les régions tropicales, comprenant des habitats comme les récifs coralliens, herbiers marins, mangroves et alguiers. Ces écosystèmes sont caractérisés par leur biodiversité et leur rôle écologique clé.">écosystèmes
-      marins tropicaux côtiers</abbr></strong>, tels que les récifs coralliens,
-  les <strong><abbr
-      title="Plantes marines formant des prairies sous-marines. ">herbiers à
-      phanérogames</abbr></strong>, les mangroves et les alguiers, sont des
-  systèmes écologiques extrêmement diversifiés. Ils sont formés par
-  l’interaction complexe de <strong><abbr
-      title="Ensemble des organismes vivants (plantes, animaux, bactéries) qui interagissent dans un écosystème.">facteurs
-      biotiques</abbr></strong>, comme les relations entre les espèces, et
-  <strong><abbr title="Composantes non vivantes de l’environnement, comme la température, la lumière, le sol, et les nutriments, influençant les écosystèmes.
-">abiotiques</abbr></strong>, tels que les conditions environnementales
-  (température, salinité, nutriments).</p>
-<p>Ces écosystèmes sont en perpétuelle évolution et subissent des changements
-  importants sous l’influence de <strong><abbr title="Modification brusque et imprévisible d’un paramètre environnemental qui dépasse la capacité d’un écosystème à résister ou s’adapter.
-">perturbations</abbr> </strong>naturelles et anthropiques.</p>
-<p>Les &gt;perturbations, qu'elles soient naturelles (tempêtes, blanchissement
-  des coraux, variations climatiques) ou anthropiques (pollution, surpêche,
-  destruction des habitats), peuvent provoquer de graves déséquilibres. Ces
-  perturbations sont caractérisées par leur intensité, leur durée et leur
-  étendue spatiale, et elles peuvent dépasser la capacité de <strong><abbr
-      title="Capacité d’un écosystème à maintenir son fonctionnement et sa structure malgré une perturbation.">résistance</abbr>
-  </strong>des écosystèmes.</p>
-<p>Face à ces perturbations, les écosystèmes marins peuvent réagir de
-  différentes manières. Certains peuvent maintenir leur structure et leur
-  fonctionnement malgré l'impact, c'est ce qu'on appelle la résistance. D’autres
-  peuvent se rétablir après la perturbation, retrouvant leur état initial, un
-  processus connu sous le nom de <strong><abbr title="Aptitude d’un écosystème à absorber les perturbations et à retrouver son état initial.
-">résilience</abbr></strong>. Enfin, certains écosystèmes peuvent se
-  réorganiser et adopter une nouvelle structure écologique, ce qui marque une
-  <strong><abbr
-      title="Changement structurel d’un écosystème, adoptant une nouvelle forme ou de nouvelles relations ou organisations après une perturbation.">réorganisation</abbr>
-  </strong>en réponse à de nouvelles conditions.</p>
-<p>Les écosystèmes les plus diversifiés et connectés, qui relient des habitats
-  comme les récifs, les herbiers et les mangroves, tendent à être plus
-  résilients. Cette résilience est renforcée par la <abbr
-    title="Variété des formes de vie (plantes, animaux, micro-organismes) dans un environnement donné, essentielle à la résilience et au fonctionnement des écosystèmes.">diversité
-    biologique</abbr>, la <abbr
-    title="Liens physiques, chimiques et biologiques entre différents habitats dans un écosystème, facilitant le flux d’énergie, de nutriments et d’espèces.">connectivité</abbr>
-  entre les habitats, la <abbr
-    title="Organisation structurelle des habitats, comme les récifs coralliens, qui offrent une multitude de niches écologiques.">complexité
-    structurale</abbr> des écosystèmes (comme les récifs coralliens
-  tridimensionnels), ainsi que par la capacité des systèmes à anticiper et à
-  s’adapter aux changements. Ces facteurs permettent à ces écosystèmes de mieux
-  résister aux perturbations et de maintenir leurs fonctions essentielles à long
-  terme.</p>
+
+<div class="app">
+
+    <h1>🎴 Piocheur de cartes</h1>
+
+    <div class="subtitle">
+        Événements techniques et infrastructures
+    </div>
+
+    <!-- COMPTEURS -->
+
+    <div class="stats">
+
+        <div class="stat">
+            🃏 Cartes restantes :
+            <span id="remaining">60</span>
+        </div>
+
+        <div class="stat">
+            📜 Cartes tirées :
+            <span id="drawn">0</span>
+        </div>
+
+    </div>
+
+
+    <!-- CARTES -->
+
+    <div id="cards"></div>
+
+
+    <!-- BOUTONS -->
+
+    <div class="controls">
+
+        <button
+            class="primary big"
+            id="drawBtn">
+            🎴 PIOCHER UNE CARTE
+        </button>
+
+        <button
+            class="primary big"
+            id="draw3Btn">
+            🎴🎴🎴 TIRER 3 CARTES
+        </button>
+
+        <button
+            class="secondary"
+            id="returnBtn"
+            disabled>
+            ↩ Remettre les dernières cartes
+        </button>
+
+        <button
+            class="secondary"
+            id="resetBtn">
+            🔄 Nouvelle partie
+        </button>
+
+    </div>
+
+
+    <!-- HISTORIQUE -->
+
+    <div class="history">
+
+        <h2>📜 Historique</h2>
+
+        <div
+            id="historyList"
+            class="empty">
+            Aucune carte tirée.
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   LES 60 CARTES
+   ========================================================= */
+
+const cards = [
+
+/* =========================================================
+   PROGRÈS TECHNIQUE TEMPORAIRE
+   ========================================================= */
+
+{
+    cat: "Progrès technique temporaire",
+    cls: "progres",
+    title: "Innovation logistique",
+    text: "Une nouvelle méthode de transport réduit temporairement les coûts d’infrastructure. Construisez une infrastructure gratuitement."
+},
+
+{
+    cat: "Progrès technique temporaire",
+    cls: "progres",
+    title: "Avancée en ingénierie",
+    text: "Une technologie permet de doubler l’efficacité du travail pour un tour. Multipliez vos unités L par 2 ce tour-ci."
+},
+
+{
+    cat: "Progrès technique temporaire",
+    cls: "progres",
+    title: "Découverte d’un procédé écoénergétique",
+    text: "Les usines consomment moins de ressources. Réduisez le coût de construction d’un centre de production à 3K, 1L."
+},
+
+{
+    cat: "Progrès technique temporaire",
+    cls: "progres",
+    title: "Automatisation temporaire",
+    text: "Les machines remplacent une partie du travail humain. Vous pouvez construire deux infrastructures pour le prix d’une."
+},
+
+{
+    cat: "Progrès technique temporaire",
+    cls: "progres",
+    title: "Partenariat universitaire",
+    text: "Une collaboration avec un centre de recherche augmente la productivité du capital. Gagnez immédiatement 2K supplémentaires."
+},
+
+{
+    cat: "Progrès technique temporaire",
+    cls: "progres",
+    title: "Réduction fiscale pour l’innovation",
+    text: "Une politique publique encourage les investissements. Vous pouvez construire une infrastructure sans puiser dans vos ressources."
+},
+
+{
+    cat: "Progrès technique temporaire",
+    cls: "progres",
+    title: "Programme de formation accélérée",
+    text: "Le capital humain s’améliore. Utilisez 1L de moins pour chaque construction ce tour-ci."
+},
+
+{
+    cat: "Progrès technique temporaire",
+    cls: "progres",
+    title: "Digitalisation des échanges",
+    text: "Les transactions deviennent plus rapides. Vous pouvez échanger des ressources même sans connexion directe."
+},
+
+{
+    cat: "Progrès technique temporaire",
+    cls: "progres",
+    title: "Maintenance prédictive",
+    text: "Les infrastructures existantes durent plus longtemps. Ignorez une carte de dépréciation ce tour-ci."
+},
+
+{
+    cat: "Progrès technique temporaire",
+    cls: "progres",
+    title: "Optimisation énergétique",
+    text: "Une innovation réduit les pertes de production. Gagnez 1 point de victoire supplémentaire si vous construisez un centre de production ce tour-ci."
+},
+
+{
+    cat: "Progrès technique temporaire",
+    cls: "progres",
+    title: "Robotisation expérimentale",
+    text: "Des robots automatisent une partie de la production. Réduisez le coût en L de 50 % pour un tour."
+},
+
+{
+    cat: "Progrès technique temporaire",
+    cls: "progres",
+    title: "Logiciel d’optimisation logistique",
+    text: "Un nouvel algorithme améliore la coordination des transports. +1 ressource transférable sans coût supplémentaire."
+},
+
+{
+    cat: "Progrès technique temporaire",
+    cls: "progres",
+    title: "Découverte d’un matériau composite",
+    text: "Les infrastructures deviennent plus légères et durables. Payez 1K de moins pour toute nouvelle construction."
+},
+
+{
+    cat: "Progrès technique temporaire",
+    cls: "progres",
+    title: "Intelligence artificielle prédictive",
+    text: "L’IA anticipe les défaillances. Évitez tout effet de régression technique au prochain tour."
+},
+
+{
+    cat: "Progrès technique temporaire",
+    cls: "progres",
+    title: "Coopération industrielle régionale",
+    text: "Les clusters technologiques échangent librement leurs innovations. Doublez votre production sur une tuile au choix."
+},
+
+{
+    cat: "Progrès technique temporaire",
+    cls: "progres",
+    title: "Réseau énergétique intelligent",
+    text: "L’électricité est redistribuée plus efficacement. Réduisez les coûts énergétiques de moitié pour un tour."
+},
+
+{
+    cat: "Progrès technique temporaire",
+    cls: "progres",
+    title: "Nouvelle technique de recyclage",
+    text: "Transformez une ressource perdue (L, K) en ressource active."
+},
+
+{
+    cat: "Progrès technique temporaire",
+    cls: "progres",
+    title: "Soutien international à la recherche",
+    text: "Recevez une subvention étrangère. Ajoutez 2K à vos ressources disponibles ce tour."
+},
+
+{
+    cat: "Progrès technique temporaire",
+    cls: "progres",
+    title: "Innovation participative",
+    text: "Les travailleurs proposent des améliorations. +1 production par infrastructure ce tour."
+},
+
+{
+    cat: "Progrès technique temporaire",
+    cls: "progres",
+    title: "Production modulaire",
+    text: "Les installations sont plus flexibles. Vous pouvez déplacer une infrastructure sur une autre tuile gratuitement."
+},
+
+
+/* =========================================================
+   RÉGRESSION TECHNIQUE TEMPORAIRE
+   ========================================================= */
+
+{
+    cat: "Régression technique temporaire",
+    cls: "regression",
+    title: "Panne industrielle",
+    text: "Une machine essentielle tombe en panne. Doublez les coûts en K pour construire une infrastructure ce tour-ci."
+},
+
+{
+    cat: "Régression technique temporaire",
+    cls: "regression",
+    title: "Grève des techniciens",
+    text: "Les travaux ralentissent. Chaque construction requiert 1L supplémentaire."
+},
+
+{
+    cat: "Régression technique temporaire",
+    cls: "regression",
+    title: "Cyberattaque",
+    text: "Les systèmes numériques sont paralysés. Vous ne pouvez ni échanger ni construire pendant ce tour."
+},
+
+{
+    cat: "Régression technique temporaire",
+    cls: "regression",
+    title: "Pénurie de pièces détachées",
+    text: "Les approvisionnements ralentissent. Chaque construction coûte 1K de plus."
+},
+
+{
+    cat: "Régression technique temporaire",
+    cls: "regression",
+    title: "Obsolescence informatique",
+    text: "Un logiciel critique cesse de fonctionner. Vous devez suspendre vos constructions d’infrastructure pour un tour."
+},
+
+{
+    cat: "Régression technique temporaire",
+    cls: "regression",
+    title: "Erreur d’ingénierie",
+    text: "Un plan de construction est incorrect. Une infrastructure construite ce tour-ci est immédiatement perdue."
+},
+
+{
+    cat: "Régression technique temporaire",
+    cls: "regression",
+    title: "Surcoût énergétique",
+    text: "Les prix de l’énergie montent. Augmentez de 50% les coûts en K pour vos constructions."
+},
+
+{
+    cat: "Régression technique temporaire",
+    cls: "regression",
+    title: "Défaut de coordination",
+    text: "Les équipes travaillent de manière inefficace. Réduisez vos gains de ressources de moitié ce tour-ci."
+},
+
+{
+    cat: "Régression technique temporaire",
+    cls: "regression",
+    title: "Rupture d’approvisionnement international",
+    text: "Une perturbation logistique empêche la réception de matériaux. Vous ne pouvez pas construire de centre de production ce tour."
+},
+
+{
+    cat: "Régression technique temporaire",
+    cls: "regression",
+    title: "Problème de compatibilité technologique",
+    text: "Les nouvelles machines ne fonctionnent pas avec les anciennes. Une infrastructure de votre choix devient inutilisable pour un tour."
+},
+
+{
+    cat: "Régression technique temporaire",
+    cls: "regression",
+    title: "Coupure d’électricité",
+    text: "Une panne majeure bloque toute production. Aucun gain de ressources ce tour-ci."
+},
+
+{
+    cat: "Régression technique temporaire",
+    cls: "regression",
+    title: "Erreur de conception",
+    text: "Les plans de construction contiennent une erreur. Les infrastructures construites ce tour coûtent +1K et +1L."
+},
+
+{
+    cat: "Régression technique temporaire",
+    cls: "regression",
+    title: "Bug de mise à jour",
+    text: "Un logiciel industriel défectueux perturbe la chaîne de production. Aucune optimisation possible pendant deux tours."
+},
+
+{
+    cat: "Régression technique temporaire",
+    cls: "regression",
+    title: "Perte de savoir-faire",
+    text: "Une génération de techniciens part à la retraite. Coûts en L +50 % pendant un tour."
+},
+
+{
+    cat: "Régression technique temporaire",
+    cls: "regression",
+    title: "Contrefaçon de pièces importées",
+    text: "Les pièces utilisées sont défectueuses. Une infrastructure échoue automatiquement."
+},
+
+{
+    cat: "Régression technique temporaire",
+    cls: "regression",
+    title: "Incident de cybersécurité",
+    text: "Des données de production sont corrompues. Vous perdez 1K pour les restaurer."
+},
+
+{
+    cat: "Régression technique temporaire",
+    cls: "regression",
+    title: "Réglementation inattendue",
+    text: "De nouvelles normes ralentissent les chantiers. Réduisez de moitié le nombre d’infrastructures constructibles ce tour."
+},
+
+{
+    cat: "Régression technique temporaire",
+    cls: "regression",
+    title: "Grêle destructrice",
+    text: "Les équipements extérieurs sont endommagés. Supprimez une infrastructure aléatoire."
+},
+
+{
+    cat: "Régression technique temporaire",
+    cls: "regression",
+    title: "Rupture de brevet",
+    text: "Vous perdez l’accès temporaire à une technologie clé. Les coûts augmentent de 1K sur toutes les tuiles industrielles."
+},
+
+{
+    cat: "Régression technique temporaire",
+    cls: "regression",
+    title: "Sous-traitance défaillante",
+    text: "Votre fournisseur externe échoue à livrer. Retard de production d’un tour complet."
+},
+
+
+/* =========================================================
+   DÉPRÉCIATION ACCÉLÉRÉE DES INFRASTRUCTURES
+   ========================================================= */
+
+{
+    cat: "Dépréciation accélérée des infrastructures",
+    cls: "depreciation",
+    title: "Corrosion accélérée",
+    text: "Des conditions météorologiques extrêmes endommagent vos installations. Retirez deux infrastructures les plus anciennes."
+},
+
+{
+    cat: "Dépréciation accélérée des infrastructures",
+    cls: "depreciation",
+    title: "Séisme mineur",
+    text: "Une partie de vos routes est détruite. Choisissez une infrastructure connectée à un centre et retirez-la."
+},
+
+{
+    cat: "Dépréciation accélérée des infrastructures",
+    cls: "depreciation",
+    title: "Inondations",
+    text: "Des pluies intenses isolent vos centres de production. Vous ne pouvez pas échanger de ressources pendant un tour."
+},
+
+{
+    cat: "Dépréciation accélérée des infrastructures",
+    cls: "depreciation",
+    title: "Vieillissement des matériaux",
+    text: "L’usure du temps réduit la fiabilité des infrastructures. Retirez une infrastructure aléatoire."
+},
+
+{
+    cat: "Dépréciation accélérée des infrastructures",
+    cls: "depreciation",
+    title: "Maintenance différée",
+    text: "Faute de budget, les réparations sont reportées. Vous perdez 1 point de victoire si vous ne reconstruisez pas une infrastructure au prochain tour."
+},
+
+{
+    cat: "Dépréciation accélérée des infrastructures",
+    cls: "depreciation",
+    title: "Tempête de grande ampleur",
+    text: "Les réseaux de transport sont endommagés. Retirez deux infrastructures non adjacentes."
+},
+
+{
+    cat: "Dépréciation accélérée des infrastructures",
+    cls: "depreciation",
+    title: "Effondrement d’un pont",
+    text: "La liaison entre deux tuiles est coupée. Aucun échange possible sur ce lien jusqu’à reconstruction."
+},
+
+{
+    cat: "Dépréciation accélérée des infrastructures",
+    cls: "depreciation",
+    title: "Pollution du sol",
+    text: "Une infrastructure devient inutilisable. Retirez-la immédiatement."
+},
+
+{
+    cat: "Dépréciation accélérée des infrastructures",
+    cls: "depreciation",
+    title: "Gel des investissements publics",
+    text: "Aucun entretien possible ce tour-ci. Toutes les infrastructures construites précédemment subissent une perte d’efficacité (ne comptent pas pour la connexion)."
+},
+
+{
+    cat: "Dépréciation accélérée des infrastructures",
+    cls: "depreciation",
+    title: "Érosion côtière",
+    text: "Les installations portuaires sont endommagées. Retirez une infrastructure située sur une tuile océan/rivière."
+},
+
+{
+    cat: "Dépréciation accélérée des infrastructures",
+    cls: "depreciation",
+    title: "Affaissement du sol",
+    text: "Une tuile devient instable. Détruisez une infrastructure construite sur terrain sans capital physique."
+},
+
+{
+    cat: "Dépréciation accélérée des infrastructures",
+    cls: "depreciation",
+    title: "Température extrême",
+    text: "Une vague de chaleur endommage les matériaux. Les infrastructures coûtent +1K à entretenir pendant 2 tours."
+},
+
+{
+    cat: "Dépréciation accélérée des infrastructures",
+    cls: "depreciation",
+    title: "Pannes en série",
+    text: "Une cascade de défaillances réduit l’efficacité du réseau. -1 production sur toutes les tuiles connectées."
+},
+
+{
+    cat: "Dépréciation accélérée des infrastructures",
+    cls: "depreciation",
+    title: "Incendie accidentel",
+    text: "Un centre de production est détruit. Retirez une infrastructure et perdez 1K."
+},
+
+{
+    cat: "Dépréciation accélérée des infrastructures",
+    cls: "depreciation",
+    title: "Dépassement budgétaire chronique",
+    text: "L’entretien devient trop coûteux. Supprimez l’infrastructure la plus ancienne."
+},
+
+{
+    cat: "Dépréciation accélérée des infrastructures",
+    cls: "depreciation",
+    title: "Sable et corrosion marine",
+    text: "Les zones côtières se dégradent plus vite. Toutes les infrastructures sur les bords du plateau sont perdues."
+},
+
+{
+    cat: "Dépréciation accélérée des infrastructures",
+    cls: "depreciation",
+    title: "Obsolescence accélérée",
+    text: "De nouvelles normes rendent certaines installations obsolètes. Retirez une infrastructure non modernisée."
+},
+
+{
+    cat: "Dépréciation accélérée des infrastructures",
+    cls: "depreciation",
+    title: "Retrait des investisseurs",
+    text: "Faute de capitaux, l’entretien est annulé. Une infrastructure s’effondre."
+},
+
+{
+    cat: "Dépréciation accélérée des infrastructures",
+    cls: "depreciation",
+    title: "Mauvais drainage",
+    text: "Les fondations sont fragilisées. -50 % d’efficacité sur une tuile agricole ou urbaine."
+},
+
+{
+    cat: "Dépréciation accélérée des infrastructures",
+    cls: "depreciation",
+    title: "Météo extrême répétée",
+    text: "Les intempéries prolongées endommagent le réseau. Perdez 1 infrastructure par tuile exposée pendant 2 tours."
+}
+
+];
+
+
+/* =========================================================
+   VARIABLES DU JEU
+   ========================================================= */
+
+let deck = [];
+let drawn = [];
+
+let lastDrawn = [];
+
+
+/* =========================================================
+   MÉLANGE
+   ========================================================= */
+
+function shuffle(array) {
+
+    const newArray = [...array];
+
+    for (let i = newArray.length - 1; i > 0; i--) {
+
+        const j = Math.floor(Math.random() * (i + 1));
+
+        [newArray[i], newArray[j]] =
+        [newArray[j], newArray[i]];
+
+    }
+
+    return newArray;
+}
+
+
+/* =========================================================
+   NOUVELLE PARTIE
+   ========================================================= */
+
+function resetGame() {
+
+    deck = shuffle(cards);
+
+    drawn = [];
+
+    lastDrawn = [];
+
+    document.getElementById("cards").style.display = "none";
+
+    document.getElementById("returnBtn").disabled = true;
+
+    updateDisplay();
+
+}
+
+
+/* =========================================================
+   MISE À JOUR DES COMPTEURS
+   ========================================================= */
+
+function updateDisplay() {
+
+    document.getElementById("remaining").textContent =
+        deck.length;
+
+    document.getElementById("drawn").textContent =
+        drawn.length;
+
+
+    const history =
+        document.getElementById("historyList");
+
+
+    if (drawn.length === 0) {
+
+        history.className = "empty";
+
+        history.textContent =
+            "Aucune carte tirée.";
+
+        return;
+
+    }
+
+
+    history.className = "";
+
+
+    history.innerHTML =
+        "<ol>" +
+
+        drawn.map(card => {
+
+            return `
+                <li>
+                    ${escapeHTML(card.title)}
+                    —
+                    ${escapeHTML(card.cat)}
+                </li>
+            `;
+
+        }).join("") +
+
+        "</ol>";
+
+}
+
+
+/* =========================================================
+   PROTECTION HTML
+   ========================================================= */
+
+function escapeHTML(text) {
+
+    return text.replace(/[&<>"']/g, function(char) {
+
+        return {
+
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#039;"
+
+        }[char];
+
+    });
+
+}
+
+
+/* =========================================================
+   AFFICHAGE DES CARTES
+   ========================================================= */
+
+function displayCards(cardsToDisplay) {
+
+    const container =
+        document.getElementById("cards");
+
+
+    container.innerHTML = "";
+
+
+    cardsToDisplay.forEach((card, index) => {
+
+        const element =
+            document.createElement("div");
+
+
+        element.className = "card";
+
+
+        element.style.animationDelay =
+            (index * 0.1) + "s";
+
+
+        element.innerHTML = `
+
+            <div class="category ${card.cls}">
+                ${escapeHTML(card.cat)}
+            </div>
+
+            <h2 class="card-title">
+                ${escapeHTML(card.title)}
+            </h2>
+
+            <div class="effect">
+                ${escapeHTML(card.text)}
+            </div>
+
+        `;
+
+
+        container.appendChild(element);
+
+    });
+
+
+    container.style.display = "grid";
+
+}
+
+
+/* =========================================================
+   TIRER UNE CARTE
+   ========================================================= */
+
+function drawOneCard() {
+
+    if (deck.length === 0) {
+
+        alert(
+            "La pioche est vide ! Lance une nouvelle partie."
+        );
+
+        return;
+
+    }
+
+
+    const card = deck.pop();
+
+
+    drawn.push(card);
+
+    lastDrawn = [card];
+
+
+    displayCards([card]);
+
+
+    document.getElementById("returnBtn")
+        .disabled = false;
+
+
+    updateDisplay();
+
+}
+
+
+/* =========================================================
+   TIRER 3 CARTES
+   ========================================================= */
+
+function drawThreeCards() {
+
+    if (deck.length < 3) {
+
+        alert(
+            "Il ne reste pas assez de cartes pour tirer 3 cartes."
+        );
+
+        return;
+
+    }
+
+
+    const threeCards = [];
+
+
+    for (let i = 0; i < 3; i++) {
+
+        const card = deck.pop();
+
+        threeCards.push(card);
+
+        drawn.push(card);
+
+    }
+
+
+    lastDrawn = threeCards;
+
+
+    displayCards(threeCards);
+
+
+    document.getElementById("returnBtn")
+        .disabled = false;
+
+
+    updateDisplay();
+
+}
+
+
+/* =========================================================
+   REMETTRE LES DERNIÈRES CARTES
+   ========================================================= */
+
+function returnLastCards() {
+
+    if (lastDrawn.length === 0) {
+
+        return;
+
+    }
+
+
+    lastDrawn.forEach(card => {
+
+        const index =
+            drawn.lastIndexOf(card);
+
+
+        if (index !== -1) {
+
+            drawn.splice(index, 1);
+
+        }
+
+
+        deck.push(card);
+
+    });
+
+
+    deck = shuffle(deck);
+
+
+    lastDrawn = [];
+
+
+    document.getElementById("cards")
+        .style.display = "none";
+
+
+    document.getElementById("returnBtn")
+        .disabled = true;
+
+
+    updateDisplay();
+
+}
+
+
+/* =========================================================
+   BOUTONS
+   ========================================================= */
+
+document
+    .getElementById("drawBtn")
+    .addEventListener(
+        "click",
+        drawOneCard
+    );
+
+
+document
+    .getElementById("draw3Btn")
+    .addEventListener(
+        "click",
+        drawThreeCards
+    );
+
+
+document
+    .getElementById("returnBtn")
+    .addEventListener(
+        "click",
+        returnLastCards
+    );
+
+
+document
+    .getElementById("resetBtn")
+    .addEventListener(
+        "click",
+        resetGame
+    );
+
+
+/* =========================================================
+   DÉMARRAGE
+   ========================================================= */
+
+resetGame();
+
+</script>
+
 </body>
 </html>
